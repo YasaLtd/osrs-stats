@@ -16,6 +16,8 @@
                 }
                 
                 const text = await response.text();
+                console.log(text); // Log the response text for debugging
+
                 const lines = text.split('\n');
                 const skills = ['Overall', 'Attack', 'Defence', 'Strength', 'Hitpoints', 'Ranged', 'Prayer', 'Magic'];
                 
@@ -29,21 +31,22 @@
                 
                 return JSON.stringify(result);
             } catch (error) {
+                console.error('Fetch error:', error); // Log the error
                 return JSON.stringify({error: 'Failed to fetch stats'});
             }
         }
 
-        // Handle the query parameter
-        const urlParams = new URLSearchParams(window.location.search);
-        const username = urlParams.get('username');
-        
-        if (username) {
-            getStats(username).then(result => {
-                document.body.textContent = result;
-            });
-        } else {
-            document.body.textContent = JSON.stringify({error: 'No username provided'});
-        }
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const username = urlParams.get('username');
+            if (username) {
+                getStats(username).then(result => {
+                    document.body.textContent = result;
+                });
+            } else {
+                document.body.textContent = JSON.stringify({error: 'No username provided'});
+            }
+        });
     </script>
 </body>
 </html>
